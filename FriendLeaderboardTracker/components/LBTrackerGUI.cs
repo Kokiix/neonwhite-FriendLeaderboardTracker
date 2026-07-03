@@ -22,7 +22,6 @@ class LBTrackerGUI : MonoBehaviour
         GUILayout.Height(800));
     }
 
-    int _topControlHeight = 50;
     int _margin = 50;
     GUIStyle _diffTextStyle;
     Vector2 _scrollPosition;
