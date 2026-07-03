@@ -26,6 +26,9 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="$(DLLs)\Assembly-CSharp.dll" Publicize="true" />
+        <Reference Include="$(DLLs)\Assembly-CSharp-firstpass.dll" />
+
+        <Reference Include="$(DLLs)\Unity.InputSystem.dll" /> <!-- for update loop test button  -->
     </ItemGroup>
 
     <ItemGroup>
