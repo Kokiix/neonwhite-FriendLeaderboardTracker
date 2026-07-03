@@ -6,7 +6,7 @@
 
         <BepInExPluginGuid>com.koki.FriendLeaderboardTracker</BepInExPluginGuid>
         <BepInExPluginName>FriendLeaderboardTracker</BepInExPluginName>
-        <BepInExPluginVersion>1.1.0</BepInExPluginVersion> <!-- x-release-please-version -->
+        <BepInExPluginVersion>1.2.0</BepInExPluginVersion> <!-- x-release-please-version -->
 
         <BepInExPluginDir>D:\SteamLibrary\steamapps\common\Neon White\BepInEx\plugins</BepInExPluginDir>
         <Thunderstore>.\.thunderstore</Thunderstore>
