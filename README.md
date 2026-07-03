@@ -3,3 +3,11 @@
 ---
 
 Press `F` in the Heaven Hub to view the Leaderboard Tracker.
+
+**potential features**
+
+- port to melon
+
+- other sorting/filtering options
+
+- try to use in game UI assets
