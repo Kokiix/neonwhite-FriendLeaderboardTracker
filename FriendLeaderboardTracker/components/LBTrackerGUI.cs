@@ -17,12 +17,15 @@ class LBTrackerGUI : MonoBehaviour
 
     void OnGUI()
     {
-        GUI.Window(id: 0, new Rect(980, 150, 800, 800), WindowFunction, "Friend LB Tracker (F)");
+        GUILayout.Window(id: 0, new Rect(980, 150, 800, 800), WindowFunction, "Friend LB Tracker (F)",
+        GUILayout.Width(800),
+        GUILayout.Height(800));
     }
 
     int _topControlHeight = 50;
     int _margin = 50;
     GUIStyle _diffTextStyle;
+    Vector2 _scrollPosition;
 
     internal static bool displayWinningTimes = true;
 
@@ -34,41 +37,48 @@ class LBTrackerGUI : MonoBehaviour
             {
                 alignment = TextAnchor.UpperLeft,
                 richText = true,
+                wordWrap = true,
             };
         }
 
-        var refreshButton = GUI.Button(new Rect(
-            _margin,
-            _topControlHeight,
-            100,
-            25),
-            "Refresh (R)");
+        // Layout
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(_margin);
+        GUILayout.BeginVertical();
+        GUILayout.Space(25);
+
+        GUILayout.BeginHorizontal();
+        var refreshButton = GUILayout.Button("Refresh (R)", GUILayout.Width(100));
+        GUILayout.Space(50);
+        var newToggleVal = GUILayout.Toggle(
+            displayWinningTimes,
+            "Display levels where you are winning (D)");
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(25);
+
+        _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
+        GUILayout.Box(
+            DisplayString,
+            _diffTextStyle);
+        GUILayout.EndScrollView();
+
+        GUILayout.Space(_margin);
+        GUILayout.EndVertical();
+        GUILayout.Space(_margin);
+        GUILayout.EndHorizontal();
+
+        // Side effects
         if (refreshButton && !Leaderboard.fetchInProgress)
         {
             Leaderboard.FetchAllLBs();
         }
 
-        var newToggleVal = GUI.Toggle(new Rect(
-            _margin + 100 + 25,
-            _topControlHeight,
-            250,
-            50),
-            displayWinningTimes,
-            "Display levels where you are winning (D)");
         if (newToggleVal != displayWinningTimes)
         {
             displayWinningTimes = newToggleVal;
             GenerateTimeString();
         }
-
-        GUI.Box(new Rect(
-            _margin,
-            _margin + _topControlHeight,
-            800 - _margin * 2,
-            800 - _margin * 2 - _topControlHeight),
-        DisplayString,
-        _diffTextStyle);
-
     }
 
     const string red = "#FF0000";
