@@ -29,14 +29,30 @@ class FriendLeaderboardTrackerPlugin : BaseUnityPlugin
             Destroy(gui);
     }
 
+    LBTrackerGUI gui;
+
     void Update()
     {
         if (Keyboard.current.fKey.wasPressedThisFrame && SceneManager.GetActiveScene().name == "Heaven_Environment")
         {
-            if (gameObject.TryGetComponent(out LBTrackerGUI gui))
+            if (gui)
+            {
                 Destroy(gui);
+                gui = null;
+            }
             else
-                gameObject.AddComponent<LBTrackerGUI>();
+                gui = gameObject.AddComponent<LBTrackerGUI>();
+        }
+
+        if (Keyboard.current.rKey.wasPressedThisFrame && gui && !Leaderboard.fetchInProgress)
+        {
+            Leaderboard.FetchAllLBs();
+        }
+
+        if (Keyboard.current.dKey.wasPressedThisFrame && gui)
+        {
+            LBTrackerGUI.displayWinningTimes = !LBTrackerGUI.displayWinningTimes;
+            LBTrackerGUI.GenerateTimeString();
         }
     }
 }

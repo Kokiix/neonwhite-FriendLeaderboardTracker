@@ -24,7 +24,7 @@ class LBTrackerGUI : MonoBehaviour
     int _margin = 50;
     GUIStyle _diffTextStyle;
 
-    static bool displayWinningTimes = true;
+    internal static bool displayWinningTimes = true;
 
     void WindowFunction(int windowID)
     {
@@ -37,13 +37,24 @@ class LBTrackerGUI : MonoBehaviour
             };
         }
 
-        var newToggleVal = GUI.Toggle(new Rect(
+        var refreshButton = GUI.Button(new Rect(
             _margin,
+            _topControlHeight,
+            100,
+            25),
+            "Refresh (R)");
+        if (refreshButton && !Leaderboard.fetchInProgress)
+        {
+            Leaderboard.FetchAllLBs();
+        }
+
+        var newToggleVal = GUI.Toggle(new Rect(
+            _margin + 100 + 25,
             _topControlHeight,
             250,
             50),
             displayWinningTimes,
-            "Display levels where you are winning");
+            "Display levels where you are winning (D)");
         if (newToggleVal != displayWinningTimes)
         {
             displayWinningTimes = newToggleVal;

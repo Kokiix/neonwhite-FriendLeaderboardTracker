@@ -22,7 +22,6 @@ static class Leaderboard
     }
     internal static void FetchAllLBs()
     {
-        Debug.LogError("starting fetch");
         FriendLeaderboardTrackerPlugin.Instance.StartCoroutine(FetchAllRoutine());
     }
 
