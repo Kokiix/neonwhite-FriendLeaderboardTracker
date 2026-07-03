@@ -43,6 +43,9 @@ static class Leaderboard
         {"Interface/MISSION_07_TITLE", "Reckoning"},
         {"Interface/MISSION_08_TITLE", "Benediction"},
         {"Interface/MISSION_09_TITLE", "Aprocrypha"},
+        {"Interface/MISSION_10_TITLE", "The Third Temple"},
+        {"Interface/MISSION_11_TITLE", "Thousand Pound Butterfly"},
+        {"Interface/MISSION_12_TITLE", "Hand of God"},
     };
 
     internal static readonly Dictionary<string, string> LEVEL_NAMES = new()
