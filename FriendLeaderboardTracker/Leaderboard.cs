@@ -9,6 +9,9 @@ using UnityEngine.SceneManagement;
 
 static class Leaderboard
 {
+    internal static int playedMaps = 0;
+    internal static int totalWins = 0;
+
     internal static bool completedFetch = false;
     internal static bool fetchInProgress = false;
     internal static void FetchAllLBs(Scene s, LoadSceneMode mode)
@@ -23,6 +26,7 @@ static class Leaderboard
     }
     internal static void FetchAllLBs()
     {
+        totalWins = 0;
         FriendLeaderboardTrackerPlugin.Instance.StartCoroutine(FetchAllRoutine());
     }
 
@@ -186,7 +190,10 @@ static class Leaderboard
                 if (MISSION_NAMES.ContainsKey(mission.missionDisplayName))
                     currMission = MISSION_NAMES[mission.missionDisplayName];
                 else
+                {
                     currMission = mission.missionDisplayName;
+                    if (currMission == "Green's Maps") break;
+                }
                 levelTimeDiffs[currMission] = [];
 
                 foreach (var level in mission.levels)
@@ -201,7 +208,6 @@ static class Leaderboard
                 }
             }
         }
-
         // debug
         yield return null;
 
@@ -250,6 +256,7 @@ static class Leaderboard
 
         if (firstPlace.m_steamIDUser == SteamUser.GetSteamID())
         {
+            playedMaps++;
             if (pCallback.m_cEntryCount >= 2)
             {
                 SteamUserStats.GetDownloadedLeaderboardEntry(
@@ -260,6 +267,7 @@ static class Leaderboard
                     cDetailsMax: 1);
                 var timeDiff = secondPlace.m_nScore - firstPlace.m_nScore;
                 diff = "-" + timeDiff.ToString().PadLeft(5, '0').Insert(2, ".");
+                totalWins++;
             }
             else
             {
@@ -278,6 +286,7 @@ static class Leaderboard
                     cDetailsMax: 1);
                 if (entry.m_steamIDUser == SteamUser.GetSteamID())
                 {
+                    playedMaps++;
                     var timeDiff = entry.m_nScore - firstPlace.m_nScore;
                     diff = "+" + timeDiff.ToString().PadLeft(5, '0').Insert(2, ".");
                     break;
