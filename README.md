@@ -11,7 +11,3 @@ Press `F` in the Heaven Hub to view the Leaderboard Tracker.
 - other sorting/filtering options
 
 - try to use in game UI assets
-
-- refresh button
-
-- auto refresh single level on setting record
