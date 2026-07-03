@@ -16,16 +16,27 @@ static class UpdateOnUpload
     [HarmonyPatch("OnLeaderboardScoreUploaded2"), HarmonyPostfix]
     static void OnUploadFinish(LeaderboardScoreUploaded_t pCallback)
     {
-
         foreach (var missionLvlPair in Leaderboard.levelTimeDiffs)
         {
             if (missionLvlPair.Value.ContainsKey(Leaderboard.LEVEL_NAMES[lastLevelUploaded]))
             {
                 Leaderboard.currMission = missionLvlPair.Key;
                 Leaderboard.currLevel = Leaderboard.LEVEL_NAMES[lastLevelUploaded];
+
+                var prevTime = Leaderboard.levelTimeDiffs[Leaderboard.currMission][Leaderboard.currLevel];
+                if (prevTime != "Not Played")
+                {
+                    Leaderboard.playedMaps--;
+                    if (prevTime.StartsWith("-"))
+                    {
+                        Leaderboard.totalWins--;
+                    }
+                }
+
+                Leaderboard.GetLBData(lastLevelUploaded);
+                return;
             }
         }
 
-        Leaderboard.GetLBData(lastLevelUploaded);
     }
 }

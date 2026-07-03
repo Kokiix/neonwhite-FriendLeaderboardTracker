@@ -27,6 +27,7 @@ static class Leaderboard
     internal static void FetchAllLBs()
     {
         totalWins = 0;
+        playedMaps = 0;
         FriendLeaderboardTrackerPlugin.Instance.StartCoroutine(FetchAllRoutine());
     }
 
