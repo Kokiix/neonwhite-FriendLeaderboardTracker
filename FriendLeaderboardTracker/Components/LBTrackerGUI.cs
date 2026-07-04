@@ -4,32 +4,34 @@ using UnityEngine;
 
 class LBTrackerGUI : MonoBehaviour
 {
-    static string _timeDiffsString;
-    static string _totalWinsString;
+
+    internal static bool displayWinningTimes = true;
 
     void Awake()
     {
         // debug
-        if (!Leaderboard.completedFetch && !Leaderboard.fetchInProgress)
-            Leaderboard.FetchAllLBs();
+        if (!FetchLeaderboards.completedFetch && !FetchLeaderboards.fetchInProgress)
+            FetchLeaderboards.FetchAllLBs();
 
-        GenerateTimeString();
+        UpdateGUIText();
     }
 
     Rect _windowPos = new Rect(980, 150, 800, 800);
 
     void OnGUI()
     {
-        _windowPos = GUILayout.Window(id: 0, _windowPos, WindowFunction, "Friend LB Tracker (F)",
+        _windowPos = GUILayout.Window(id: 0, _windowPos, WindowFunction, "Friend LB Tracker (G)",
         GUILayout.Width(800),
         GUILayout.Height(800));
     }
 
-    int _margin = 50;
+
+    static string _timeDiffsString;
+    static string _totalWinsString;
     GUIStyle _diffTextStyle;
     Vector2 _scrollPosition;
 
-    internal static bool displayWinningTimes = true;
+    int _margin = 50;
 
     void WindowFunction(int windowID)
     {
@@ -74,29 +76,29 @@ class LBTrackerGUI : MonoBehaviour
         GUILayout.EndHorizontal();
 
         // Side effects
-        if (refreshButton && !Leaderboard.fetchInProgress)
+        if (refreshButton && !FetchLeaderboards.fetchInProgress)
         {
-            Leaderboard.FetchAllLBs();
+            FetchLeaderboards.FetchAllLBs();
         }
 
         if (newToggleVal != displayWinningTimes)
         {
             displayWinningTimes = newToggleVal;
-            GenerateTimeString();
+            UpdateGUIText();
         }
 
         GUI.DragWindow();
     }
 
-    const string red = "#FF0000";
-    const string green = "#00FF00";
-    internal static void GenerateTimeString()
+    const string _red = "#FF0000";
+    const string _green = "#00FF00";
+    internal static void UpdateGUIText()
     {
-        _totalWinsString = $"You are leading on: {Leaderboard.totalWins} / {Leaderboard.playedMaps} played maps";
+        _totalWinsString = $"You are leading on: {FetchLeaderboards.totalWins} / {FetchLeaderboards.playedMaps} played maps";
 
         StringBuilder output = new();
 
-        foreach (var missionPair in Leaderboard.levelTimeDiffs)
+        foreach (var missionPair in FetchLeaderboards.levelTimeDiffs)
         {
             output.AppendLine($"<size=20><b>{missionPair.Key}</b></size>");
             foreach (var levelPair in missionPair.Value)
@@ -104,13 +106,13 @@ class LBTrackerGUI : MonoBehaviour
                 if (levelPair.Value.StartsWith("-") && !displayWinningTimes) continue;
 
                 var coloredTime = levelPair.Value.StartsWith("-") ?
-                $"<color={green}>{levelPair.Value}</color>"
-                : $"<color={red}>{levelPair.Value}</color>";
+                $"<color={_green}>{levelPair.Value}</color>"
+                : $"<color={_red}>{levelPair.Value}</color>";
                 output.AppendLine($"<size=15>{levelPair.Key}</size>: {coloredTime}");
             }
         }
 
-        if (!Leaderboard.completedFetch)
+        if (!FetchLeaderboards.completedFetch)
         {
             output.AppendLine();
             output.AppendLine("<i>Times are still being fetched!</i>");

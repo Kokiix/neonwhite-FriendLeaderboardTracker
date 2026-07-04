@@ -3,7 +3,7 @@
 
 ---
 
-Press `F` in the Heaven Hub to view the Leaderboard Tracker.
+Press `G` (F is for fast forward :( ) in the Heaven Hub to view the Leaderboard Tracker.
 
 **potential features**
 

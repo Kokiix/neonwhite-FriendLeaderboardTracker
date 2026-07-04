@@ -9,50 +9,50 @@ using UnityEngine.SceneManagement;
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 class FriendLeaderboardTrackerPlugin : BaseUnityPlugin
 {
-    internal static FriendLeaderboardTrackerPlugin Instance;
+    internal static FriendLeaderboardTrackerPlugin instance;
     readonly Harmony _harmony = new(MyPluginInfo.PLUGIN_GUID);
 
     void Awake()
     {
         this.gameObject.hideFlags = HideFlags.HideAndDontSave;
-        Instance = this;
+        instance = this;
 
         _harmony.PatchAll();
-        SceneManager.sceneLoaded += Leaderboard.FetchAllLBs;
+        SceneManager.sceneLoaded += FetchLeaderboards.OnSceneLoad;
     }
 
     void OnDestroy()
     {
         _harmony.UnpatchSelf();
-        SceneManager.sceneLoaded -= Leaderboard.FetchAllLBs;
+        SceneManager.sceneLoaded -= FetchLeaderboards.OnSceneLoad;
         if (gameObject.TryGetComponent(out LBTrackerGUI gui))
             Destroy(gui);
     }
 
-    LBTrackerGUI gui;
+    LBTrackerGUI _gui;
 
     void Update()
     {
-        if (Keyboard.current.fKey.wasPressedThisFrame && SceneManager.GetActiveScene().name == "Heaven_Environment")
+        if (Keyboard.current.gKey.wasPressedThisFrame && SceneManager.GetActiveScene().name == "Heaven_Environment")
         {
-            if (gui)
+            if (_gui)
             {
-                Destroy(gui);
-                gui = null;
+                Destroy(_gui);
+                _gui = null;
             }
             else
-                gui = gameObject.AddComponent<LBTrackerGUI>();
+                _gui = gameObject.AddComponent<LBTrackerGUI>();
         }
 
-        if (Keyboard.current.rKey.wasPressedThisFrame && gui && !Leaderboard.fetchInProgress)
+        if (Keyboard.current.rKey.wasPressedThisFrame && _gui && !FetchLeaderboards.fetchInProgress)
         {
-            Leaderboard.FetchAllLBs();
+            FetchLeaderboards.FetchAllLBs();
         }
 
-        if (Keyboard.current.dKey.wasPressedThisFrame && gui)
+        if (Keyboard.current.dKey.wasPressedThisFrame && _gui)
         {
             LBTrackerGUI.displayWinningTimes = !LBTrackerGUI.displayWinningTimes;
-            LBTrackerGUI.GenerateTimeString();
+            LBTrackerGUI.UpdateGUIText();
         }
     }
 }
